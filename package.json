@@ -4,7 +4,8 @@
   "description": "clears discord chat of unwanted messages",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "node deploy-commands.js",
+    "dev": "node ."
   },
   "author": "",
   "license": "ISC",
