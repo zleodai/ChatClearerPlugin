@@ -5,10 +5,6 @@ const { token } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.once(Events.ClientReady, (readyClient) => {
-	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
-});
-
 client.commands = new Collection();
 
 const foldersPath = path.join(__dirname, 'commands');
@@ -28,6 +24,10 @@ for (const folder of commandFolders) {
 		}
 	}
 }
+
+client.once(Events.ClientReady, (readyClient) => {
+	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+})
 
 client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) return; 
