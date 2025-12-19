@@ -8,6 +8,8 @@ module.exports = {
         .addIntegerOption((option) => option.setName('depth').setDescription('How much messages should I check to purge (rounded to nearest hundred)').setRequired(true)),
 
 	async execute(interaction) {
+		await interaction.reply({ content: "Purging ...", ephemeral: true});
+
         const depth = interaction.options.getInteger('depth');
 
         const channels = await interaction.member.guild.channels;
@@ -17,9 +19,7 @@ module.exports = {
         let lastMsg = null;
         let purgeCount = 0;
         for (let i = 0; i < Math.floor(depth/100) +1; i++) {
-            const messagesToPurge = []
-
-            messages.forEach(msg => {
+            messages.forEach(async msg => {
                 const text = msg.content;
 
                 let badText = false;
@@ -29,10 +29,13 @@ module.exports = {
 
                 if (badText) {
                     console.log(`Purging ${msg.author.tag}: ${msg.content}`);
-
-                    purgeCount++;
-
-                    messagesToPurge.push(msg.id)
+                    
+                    try {
+                        await msg.delete();
+                        purgeCount++;
+                    } catch (error) {
+                        console.log(error)
+                    }
                 }
 
                 lastMsg = msg;
@@ -42,7 +45,5 @@ module.exports = {
         }
 
         console.log(`Purged ${purgeCount} messages`);
-
-		await interaction.reply({ content: "Purging ...", ephemeral: true});
 	},
 };
